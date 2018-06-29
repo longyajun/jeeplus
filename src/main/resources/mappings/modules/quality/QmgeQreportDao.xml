@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.quality.dao.QmgeQreportDao">
+    
+	<sql id="qmgeQreportColumns">
+		a.id AS "id",
+		a.project_id AS "projectId",
+		a.qreport_name AS "qreportName",
+		a.create_time AS "createTime",
+		a.create_writer AS "createWriter",
+		a.is_display AS "isDisplay",
+		a.qreport_des AS "qreportDes",
+		a.insert_time AS "insertTime",
+		a.update_time AS "updateTime",
+		a.express1 AS "express1",
+		a.express2 AS "express2",
+		a.express3 AS "express3",
+		a.express4 AS "express4"
+	</sql>
+	
+	<sql id="qmgeQreportJoins">
+	</sql>
+	
+    
+	<select id="get" resultType="QmgeQreport" >
+		SELECT 
+			<include refid="qmgeQreportColumns"/>
+		FROM mplat_qmge_qreport a
+		<include refid="qmgeQreportJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="QmgeQreport" >
+		SELECT 
+			<include refid="qmgeQreportColumns"/>
+		FROM mplat_qmge_qreport a
+		<include refid="qmgeQreportJoins"/>
+		<where>
+			
+			<if test="qreportName != null and qreportName != ''">
+				AND a.qreport_name = #{qreportName}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				AND a.create_time = #{createTime}
+			</if>
+			<if test="createWriter != null and createWriter != ''">
+				AND a.create_writer = #{createWriter}
+			</if>
+			<if test="insertTime != null and insertTime != ''">
+				AND a.insert_time = #{insertTime}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="QmgeQreport" >
+		SELECT 
+			<include refid="qmgeQreportColumns"/>
+		FROM mplat_qmge_qreport a
+		<include refid="qmgeQreportJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO mplat_qmge_qreport(
+			id,
+			project_id,
+			qreport_name,
+			create_time,
+			create_writer,
+			is_display,
+			qreport_des,
+			insert_time,
+			update_time,
+			express1,
+			express2,
+			express3,
+			express4
+		) VALUES (
+			#{id},
+			#{projectId},
+			#{qreportName},
+			#{createTime},
+			#{createWriter},
+			#{isDisplay},
+			#{qreportDes},
+			#{insertTime},
+			#{updateTime},
+			#{express1},
+			#{express2},
+			#{express3},
+			#{express4}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE mplat_qmge_qreport SET 	
+			create_time = #{createTime},
+			create_writer = #{createWriter},
+			is_display = #{isDisplay},
+			insert_time = #{insertTime},
+			update_time = #{updateTime},
+			express1 = #{express1},
+			express2 = #{express2},
+			express3 = #{express3},
+			express4 = #{express4}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM mplat_qmge_qreport
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE mplat_qmge_qreport SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="QmgeQreport" statementType="STATEMENT">
+		select * FROM mplat_qmge_qreport  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

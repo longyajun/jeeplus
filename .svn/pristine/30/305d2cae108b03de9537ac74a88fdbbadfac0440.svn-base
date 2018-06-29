@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.apilist.dao.UipInterfaceDao">
+    
+	<sql id="uipInterfaceColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.cost AS "cost",
+		a.createtime AS "createTime",
+		a.type AS "type"
+	</sql>
+	
+	<sql id="uipInterfaceJoins">
+	</sql>
+	
+    
+	<select id="get" resultType="UipInterface" >
+		SELECT 
+			<include refid="uipInterfaceColumns"/>
+		FROM uip_interface a
+		<include refid="uipInterfaceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="UipInterface" >
+		SELECT 
+			<include refid="uipInterfaceColumns"/>
+		FROM uip_interface a
+		<include refid="uipInterfaceJoins"/>
+		<where>
+			
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name = #{name}
+			</if>
+			<if test="cost != null and cost != ''">
+				AND a.cost = #{cost}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				AND a.createtime = #{createTime}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="UipInterface" >
+		SELECT 
+			<include refid="uipInterfaceColumns"/>
+		FROM uip_interface a
+		<include refid="uipInterfaceJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO uip_interface(
+			id,
+			name,
+			cost,
+			createtime,
+			type
+		) VALUES (
+			uip_interface_id_seq.NEXTVAL,
+			#{name},
+			#{cost},
+			#{createTime},
+			#{type}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE uip_interface SET 	
+			name=#{name},
+			cost=#{cost},
+			createTime=#{createTime},
+			type=#{type}	
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM uip_interface
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE uip_interface SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="UipInterface" statementType="STATEMENT">
+		select * FROM uip_interface  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

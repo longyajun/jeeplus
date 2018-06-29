@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.agent.dao.UipAgentDao">
+    
+	<sql id="uipAgentColumns">
+		a.id AS "id",
+		a.telephone AS "telephone",
+		a.name AS "name",
+		a.createtime AS "createTime",
+		a.agentid AS "agentId"
+	</sql>
+	
+	<sql id="uipAgentJoins">
+	</sql>
+	
+    
+	<select id="get" resultType="UipAgent" >
+		SELECT 
+			<include refid="uipAgentColumns"/>
+		FROM uip_agent a
+		<include refid="uipAgentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="UipAgent" >
+		SELECT 
+			<include refid="uipAgentColumns"/>
+		FROM uip_agent a
+		<include refid="uipAgentJoins"/>
+		<where>
+			
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="telephone != null and telephone != ''">
+				AND a.telephone = #{telephone}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name = #{name}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				AND a.createtime = #{createTime}
+			</if>
+			<if test="agentId != null and agentId != ''">
+				AND a.agentid = #{agentId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="UipAgent" >
+		SELECT 
+			<include refid="uipAgentColumns"/>
+		FROM uip_agent a
+		<include refid="uipAgentJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO uip_agent(
+			id,
+			telephone,
+			name,
+			createtime,
+			agentid
+		) VALUES (
+			uip_agent_id_seq.NEXTVAL,
+			#{telephone},
+			#{name},
+			#{createTime},
+			#{agentId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE uip_agent SET
+			telephone = #{telephone},
+			name = #{name},
+			createTime = #{createTime},
+			agentId = #{agentId}	
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM uip_agent
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE uip_agent SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="UipAgent" statementType="STATEMENT">
+		select * FROM uip_agent  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

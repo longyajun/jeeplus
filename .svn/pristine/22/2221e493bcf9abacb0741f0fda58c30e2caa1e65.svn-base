@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.history.dao.UipHistoryDao">
+    
+	<sql id="uipHistoryColumns">
+		a.id AS "id",
+		a.je AS "je",
+		a.intertype AS "interType",
+		a.khzh AS "khzh",
+		a.ip AS "ip",
+		a.createtime AS "createTime"
+	</sql>
+	
+	<sql id="uipHistoryJoins">
+	</sql>
+	
+    
+	<select id="get" resultType="UipHistory" >
+		SELECT 
+			<include refid="uipHistoryColumns"/>
+		FROM uip_history a
+		<include refid="uipHistoryJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="UipHistory" >
+		SELECT 
+			<include refid="uipHistoryColumns"/>
+		FROM uip_history a
+		<include refid="uipHistoryJoins"/>
+		<where>
+			
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="je != null and je != ''">
+				AND a.je = #{je}
+			</if>
+			<if test="interType != null and interType != ''">
+				AND a.intertype = #{interType}
+			</if>
+			<if test="khzh != null and khzh != ''">
+				AND a.khzh = #{khzh}
+			</if>
+			<if test="ip != null and ip != ''">
+				AND a.ip = #{ip}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				AND a.createtime = #{createTime}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="UipHistory" >
+		SELECT 
+			<include refid="uipHistoryColumns"/>
+		FROM uip_history a
+		<include refid="uipHistoryJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO uip_history(
+			id,
+			je,
+			intertype,
+			khzh,
+			ip,
+			createtime
+		) VALUES (
+			#{id},
+			#{je},
+			#{interType},
+			#{khzh},
+			#{ip},
+			#{createTime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE uip_history SET 	
+			khzh = #{khzh},
+			ip = #{ip},
+			createtime = #{createTime}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM uip_history
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE uip_history SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="UipHistory" statementType="STATEMENT">
+		select * FROM uip_history  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>
